@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 from torch.nn import functional as F
 import models
+from models.cl_lite_resnet_cifar import cl_lite_resnet18_cifar
 from utils.metric import accuracy, AverageMeter, Timer
 import copy
 import numpy as np
@@ -339,7 +340,9 @@ class NormalNN(nn.Module):
         cfg = self.config
 
         # Define the backbone (MLP, LeNet, VGG, ResNet ... etc) of model
-        model = models.__dict__[cfg['model_type']].__dict__[cfg['model_name']](out_dim=self.out_dim)
+        #model = models.__dict__[cfg['model_type']].__dict__[cfg['model_name']](out_dim=self.out_dim)
+        print("Using RESNET18")
+        model = cl_lite_resnet18_cifar(self.out_dim)
 
         return model
 

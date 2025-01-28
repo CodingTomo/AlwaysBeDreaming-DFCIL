@@ -50,7 +50,7 @@ def create_args():
 
     # data free knoweldge distilation
     parser.add_argument('--power_iters', type=int, default=10, help="backprop power iterations for producing images")
-    parser.add_argument('--deep_inv_params', nargs="+", type=float, default=[-1],
+    parser.add_argument('--deep_inv_params', nargs="+", type=float, default=[1e-3],
                          help="learning rate, BN loss weight, variance prior weight, CE loss temp, CE loss weight")
 
     # CL Args

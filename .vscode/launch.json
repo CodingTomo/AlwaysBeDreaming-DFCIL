@@ -1,0 +1,41 @@
+{
+    // Usare IntelliSense per informazioni sui possibili attributi.
+    // Al passaggio del mouse vengono visualizzate le descrizioni degli attributi esistenti.
+    // Per altre informazioni, visitare: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Debugger Python: File corrente",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "run_dfcil.py",
+            "console": "integratedTerminal",
+            "args": [
+                "--dataset", "CIFAR100",
+                "--gpuid", "0",
+                "--repeat", "1",
+                "--first_split_size", "10",
+                "--other_split_size", "10",
+                //"--schedule", "'100 150 200 250'",
+                "--schedule_type", "decay",
+                "--batch_size", "128",
+                "--mu", "1e-1",
+                "--memory", "0",
+                "--model_name", "resnet32",
+                "--model_type", "resnet",
+                "--learner_type", "datafree",
+                "--learner_name", "AlwaysBeDreaming",
+                "--gen_model_name", "CIFAR_GEN",
+                "--gen_model_type", "generator",
+                "--beta", "1",
+                "--power_iters", "10000",
+                //"--deep_inv_params", "1e-3 5e1 1e-3 1e3 1",
+                "--overwrite", "0",
+                "--max_task", "-1",
+                "--log_dir", "outputs/DFCIL-fivetask/CIFAR100/abd",
+                
+
+            ]
+        }
+    ]
+}
