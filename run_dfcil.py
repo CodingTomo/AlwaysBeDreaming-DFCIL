@@ -90,7 +90,10 @@ if __name__ == '__main__':
     args = get_args(sys.argv[1:])
 
     # determinstic backend
-    torch.backends.cudnn.deterministic=True
+    #torch.backends.cudnn.deterministic=True
+
+    torch.backends.cudnn.benchmark = True  # Enables auto-tuning for best cuDNN algorithm
+    torch.backends.cudnn.deterministic = False  # Ensure flexibility in algorithm selection
 
     # duplicate output stream to output file
     if not os.path.exists(args.log_dir): os.makedirs(args.log_dir)
