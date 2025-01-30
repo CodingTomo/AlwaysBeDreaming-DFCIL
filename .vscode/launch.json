@@ -11,7 +11,7 @@
             "program": "run_dfcil.py",
             "console": "integratedTerminal",
             "args": [
-                "--dataset", "CIFAR100",
+                "--dataset", "TinyImageNet",
                 "--gpuid", "0",
                 "--repeat", "1",
                 "--first_split_size", "10",
@@ -33,6 +33,7 @@
                 "--overwrite", "0",
                 "--max_task", "-1",
                 "--log_dir", "outputs/DFCIL-fivetask/CIFAR100/abd",
+                "--dataroot", "/Scratch/Magistri/cl_data"
                 
 
             ]
