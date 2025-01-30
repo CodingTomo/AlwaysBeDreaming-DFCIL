@@ -5,7 +5,7 @@ DEFAULTGPU=0
 GPUID=${1:-$DEFAULTGPU}
 
 # benchmark settings
-SPLIT=20
+SPLIT=5
 OUTDIR=outputs/abd/cifar100/20_task
 
 ###############################################################
