@@ -301,10 +301,12 @@ class AlwaysBeDreaming(DeepInversionGenBN):
         mappings = torch.ones(targets.size(), dtype=torch.float32)
         if self.gpu:
             mappings = mappings.cuda()
-        rnt = 1.0 * self.last_valid_out_dim / self.valid_out_dim
-        mappings[:self.last_valid_out_dim] = rnt
-        mappings[self.last_valid_out_dim:] = 1-rnt
-        dw_cls = mappings[targets.long()]
+        # Bug??? Non ha senso...
+        #rnt = 1.0 * self.last_valid_out_dim / self.valid_out_dim
+        #mappings[:self.last_valid_out_dim] = rnt
+        #mappings[self.last_valid_out_dim:] = 1-rnt 
+        # dw_cls = mappings[targets.long()]
+        dw_cls = mappings
 
         # forward pass
         logits_pen = self.model.forward(x=inputs, pen=True)
