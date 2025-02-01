@@ -13,6 +13,9 @@ dataset_stats = {
                  'size' : 32},   
     'ImageNet': {'mean': (0.485, 0.456, 0.406),
                  'std' : (0.229, 0.224, 0.225),
+                 'size' : 224},
+    'ImageNet100': {'mean': (0.485, 0.456, 0.406),
+                 'std' : (0.229, 0.224, 0.225),
                  'size' : 224},      
     'TinyImageNet': {'mean': (0.4389, 0.4114, 0.3682),
                  'std' : (0.2402, 0.2350, 0.2268),
@@ -38,7 +41,7 @@ def get_transform(dataset='cifar100', phase='test', aug=True, dgr=False):
             dset_std = (1.0,1.0,1.0)
 
     if phase == 'train' and aug:
-        if dataset == 'ImageNet':
+        if dataset == 'ImageNet' or dataset == 'ImageNet100':
             transform_list.extend([
                 transforms.RandomResizedCrop(224),
                 transforms.RandomHorizontalFlip(),
@@ -54,7 +57,7 @@ def get_transform(dataset='cifar100', phase='test', aug=True, dgr=False):
                 transforms.Normalize(dset_mean, dset_std),
                                 ])
     else:
-        if dataset == 'ImageNet':
+        if dataset == 'ImageNet' or dataset == 'ImageNet100':
             transform_list.extend([
                 transforms.Resize(256),
                 transforms.CenterCrop(224),

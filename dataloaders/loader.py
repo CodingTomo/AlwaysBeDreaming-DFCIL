@@ -6,6 +6,7 @@ import sys
 import pickle
 import torch.utils.data as data
 from .utils import download_url, check_integrity
+from torchvision import datasets
 
 """
 This file heavily adapts data-loading from Global Distillation
@@ -643,6 +644,65 @@ class iTinyIMNET(iDataset):
                 self.data = [path.join(val_dir, 'images', info[0])for info in infos]
                 self.targets = [self.names2index[info[1]] for info in infos]
 
+
+    def __getitem__(self, index, simple = False):
+        """
+        Args:
+            index (int): Index
+
+        Returns:
+            tuple: (image, target) where target is index of the target class
+        """
+        img_path, target = self.data[index], self.targets[index]
+        img = jpg_image_to_array(img_path)
+
+        # doing this so that it is consistent with all other datasets
+        # to return a PIL Image
+        img = Image.fromarray(img)
+
+        if self.transform is not None:
+            if simple:
+                img = self.simple_transform(img)
+            else:
+                img = self.transform(img)
+
+        return img, self.class_mapping[target], self.t
+    
+class iIMAGENET100(iDataset):
+    
+    im_size=224
+    nch=3
+
+    def load(self):
+        self.dw = False
+        self.data, self.targets = [], []
+
+        from os import path
+        root = self.root
+        FileNameEnd = 'JPEG'
+        train_dir = path.join(root, 'imagenet_subset/train')
+        self.class_names = sorted(os.listdir(train_dir))
+        self.names2index = {v: k for k, v in enumerate(self.class_names)}
+        self.data = []
+        self.targets = []
+
+        if self.train:
+            train_dir = os.path.join(root, 'imagenet_subset', 'train')
+            train_dset = datasets.ImageFolder(train_dir)
+            for item in train_dset.imgs:
+                self.data.append(item[0])
+                self.targets.append(item[1])
+
+        else:
+            val_annotations = open(os.path.join(root, 'imagenet_subset',   'val_100.txt'), "r")
+            val_lines = val_annotations.readlines()
+            for item in val_lines:
+                splitted_item = item.rstrip()
+                splitted_item  = splitted_item.split(" ")
+                image_path = "/".join([splitted_item[0].split("/")[0], splitted_item[0].split("/")[2]])
+                image_path = os.path.join(root, 'imagenet_subset', image_path)
+                self.data.append(image_path)
+                self.targets.append(int(splitted_item[1]))
 
     def __getitem__(self, index, simple = False):
         """

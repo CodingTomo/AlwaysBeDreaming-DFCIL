@@ -47,6 +47,10 @@ class Trainer:
             num_classes = 1000
             self.dataset_size = [224,224,3]
             self.top_k = 5
+        elif args.dataset == 'ImageNet100':
+            Dataset = dataloaders.iIMAGENET100
+            num_classes = 100
+            self.dataset_size = [224,224,3]
         elif args.dataset == 'TinyImageNet':
             Dataset = dataloaders.iTinyIMNET
             num_classes = 200

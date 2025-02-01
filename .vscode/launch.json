@@ -11,30 +11,33 @@
             "program": "run_dfcil.py",
             "console": "integratedTerminal",
             "args": [
-                "--dataset", "TinyImageNet",
+                "--dataset", "ImageNet100",
                 "--gpuid", "0",
                 "--repeat", "1",
                 "--first_split_size", "10",
                 "--other_split_size", "10",
                 //"--schedule", "'100 150 200 250'",
                 "--schedule_type", "decay",
-                "--batch_size", "128",
+                "--batch_size", "2",
                 "--mu", "1e-1",
                 "--memory", "0",
-                "--model_name", "resnet32",
+                "--model_name", "resnet18",
                 "--model_type", "resnet",
                 "--learner_type", "datafree",
                 "--learner_name", "AlwaysBeDreaming",
-                "--gen_model_name", "CIFAR_GEN",
+                "--gen_model_name", "TINYIMNET_GEN",
                 "--gen_model_type", "generator",
                 "--beta", "1",
                 "--power_iters", "10000",
                 //"--deep_inv_params", "1e-3 5e1 1e-3 1e3 1",
                 "--overwrite", "0",
                 "--max_task", "-1",
-                "--log_dir", "outputs/DFCIL-fivetask/CIFAR100/abd",
-                "--dataroot", "/Scratch/Magistri/cl_data"
-                
+                "--log_dir", "outputs/prova",
+                "--dataroot", "/Scratch/Magistri/cl_data",
+
+                "--rand_split",
+                "--overwrite", "0",
+                "--workers", "1"
 
             ]
         }
