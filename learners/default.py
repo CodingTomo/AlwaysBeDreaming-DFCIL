@@ -194,38 +194,38 @@ class NormalNN(nn.Module):
         return total_loss.detach(), logits
 
     def validation(self, dataloader, model=None, task_in = None,  verbal = True):
+        with torch.no_grad():
+            if model is None:
+                model = self.model
 
-        if model is None:
-            model = self.model
+            # This function doesn't distinguish tasks.
+            batch_timer = Timer()
+            acc = AverageMeter()
+            batch_timer.tic()
 
-        # This function doesn't distinguish tasks.
-        batch_timer = Timer()
-        acc = AverageMeter()
-        batch_timer.tic()
+            orig_mode = model.training
+            model.eval()
+            for i, (input, target, task) in enumerate(dataloader):
 
-        orig_mode = model.training
-        model.eval()
-        for i, (input, target, task) in enumerate(dataloader):
+                if self.gpu:
+                    with torch.no_grad():
+                        input = input.cuda()
+                        target = target.cuda()
+                if task_in is None:
+                    output = model.forward(input)[:, :self.valid_out_dim]
+                    acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
+                else:
+                    mask = target >= task_in[0]
+                    mask_ind = mask.nonzero().view(-1) 
+                    input, target = input[mask_ind], target[mask_ind]
 
-            if self.gpu:
-                with torch.no_grad():
-                    input = input.cuda()
-                    target = target.cuda()
-            if task_in is None:
-                output = model.forward(input)[:, :self.valid_out_dim]
-                acc = accumulate_acc(output, target, task, acc, topk=(self.top_k,))
-            else:
-                mask = target >= task_in[0]
-                mask_ind = mask.nonzero().view(-1) 
-                input, target = input[mask_ind], target[mask_ind]
-
-                mask = target < task_in[-1]
-                mask_ind = mask.nonzero().view(-1) 
-                input, target = input[mask_ind], target[mask_ind]
-                
-                if len(target) > 1:
-                    output = model.forward(input)[:, task_in]
-                    acc = accumulate_acc(output, target-task_in[0], task, acc, topk=(self.top_k,))
+                    mask = target < task_in[-1]
+                    mask_ind = mask.nonzero().view(-1) 
+                    input, target = input[mask_ind], target[mask_ind]
+                    
+                    if len(target) > 1:
+                        output = model.forward(input)[:, task_in]
+                        acc = accumulate_acc(output, target-task_in[0], task, acc, topk=(self.top_k,))
             
         model.train(orig_mode)
 
