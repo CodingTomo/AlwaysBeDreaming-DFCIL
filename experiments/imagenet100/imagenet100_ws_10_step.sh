@@ -37,7 +37,7 @@ LR=0.1
 #########################
 
 # Full Method
-python -u run_dfcil.py --dataset ImageNet100 --train_aug --rand_split --gpuid $GPUID --repeat $REPEAT --dataroot /Scratch/Magistri/cl_data \
+python -u run_dfcil.py --dataset ImageNet100 --train_aug --rand_split --gpuid $GPUID --repeat $REPEAT --dataroot /home/smagistri/cl_data \
     --first_split_size 50 --other_split_size $SPLIT --schedule $SCHEDULE --schedule_type decay --batch_size $BS \
     --optimizer $OPT --lr $LR --momentum $MOM --weight_decay $WD \
     --mu 1e-1 --memory 0 --model_name $MODELNAME --model_type resnet \

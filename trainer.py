@@ -51,6 +51,10 @@ class Trainer:
             Dataset = dataloaders.iIMAGENET100
             num_classes = 100
             self.dataset_size = [224,224,3]
+        elif args.dataset == 'DomainNet':
+            Dataset = dataloaders.iDomainNet
+            num_classes = 600
+            self.dataset_size = [224,224,3]
         elif args.dataset == 'TinyImageNet':
             Dataset = dataloaders.iTinyIMNET
             num_classes = 200
@@ -132,6 +136,7 @@ class Trainer:
                         'deep_inv_params': args.deep_inv_params,
                         'tasks': self.tasks_logits,
                         'top_k': self.top_k,
+                        'dataset': args.dataset
                         }
         self.learner_type, self.learner_name = args.learner_type, args.learner_name
         self.learner = learners.__dict__[self.learner_type].__dict__[self.learner_name](self.learner_config)

@@ -681,8 +681,8 @@ class iIMAGENET100(iDataset):
         root = self.root
         FileNameEnd = 'JPEG'
         train_dir = path.join(root, 'imagenet_subset/train')
-        self.class_names = sorted(os.listdir(train_dir))
-        self.names2index = {v: k for k, v in enumerate(self.class_names)}
+        #self.class_names = sorted(os.listdir(train_dir))
+        #self.names2index = {v: k for k, v in enumerate(self.class_names)}
         self.data = []
         self.targets = []
 
@@ -701,6 +701,70 @@ class iIMAGENET100(iDataset):
                 splitted_item  = splitted_item.split(" ")
                 image_path = "/".join([splitted_item[0].split("/")[0], splitted_item[0].split("/")[2]])
                 image_path = os.path.join(root, 'imagenet_subset', image_path)
+                self.data.append(image_path)
+                self.targets.append(int(splitted_item[1]))
+
+    def __getitem__(self, index, simple = False):
+        """
+        Args:
+            index (int): Index
+
+        Returns:
+            tuple: (image, target) where target is index of the target class
+        """
+        img_path, target = self.data[index], self.targets[index]
+        img = jpg_image_to_array(img_path)
+
+        # doing this so that it is consistent with all other datasets
+        # to return a PIL Image
+        img = Image.fromarray(img)
+
+        if self.transform is not None:
+            if simple:
+                img = self.simple_transform(img)
+            else:
+                img = self.transform(img)
+
+        return img, self.class_mapping[target], self.t
+    
+class iDomainNet(iDataset):
+    
+    im_size=224
+    nch=3
+
+    def load(self):
+        self.dw = False
+        self.data, self.targets = [], []
+
+        from os import path
+        root = self.root
+        FileNameEnd = 'JPEG'
+        train_annotations = open(os.path.join(root, "DomainNet",  "cs_train_{}.txt".format(6)), "r")
+        test_annotations = open(os.path.join(root, "DomainNet",  "cs_test_{}.txt".format(6)), "r")
+        #self.class_names = sorted(os.listdir(train_dir))
+        #self.names2index = {v: k for k, v in enumerate(self.class_names)}
+        self.data = []
+        self.targets = []
+
+        if self.train:
+            train_annotations = open(os.path.join(root, "DomainNet",  "cs_train_{}.txt".format(6)), "r")
+            train_lines = train_annotations.readlines()
+            for item in train_lines:
+                splitted_item = item.rstrip()
+                splitted_item  = splitted_item.split(" ")
+                image_path = "/".join([splitted_item[0].split("/")[0],splitted_item[0].split("/")[1], splitted_item[0].split("/")[2]])
+                image_path = os.path.join(root, 'DomainNet', image_path)
+                self.data.append(image_path)
+                self.targets.append(int(splitted_item[1]))
+
+        else:
+            test_annotations = open(os.path.join(root, "DomainNet",  "cs_test_{}.txt".format(6)), "r")
+            test_lines = test_annotations.readlines() 
+            for item in test_lines:
+                splitted_item = item.rstrip()
+                splitted_item  = splitted_item.split(" ")
+                image_path = "/".join([splitted_item[0].split("/")[0], splitted_item[0].split("/")[1], splitted_item[0].split("/")[2]])
+                image_path = os.path.join(root, 'DomainNet', image_path)
                 self.data.append(image_path)
                 self.targets.append(int(splitted_item[1]))
 
