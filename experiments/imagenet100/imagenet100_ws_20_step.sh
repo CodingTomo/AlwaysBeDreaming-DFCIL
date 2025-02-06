@@ -22,15 +22,15 @@ OVERWRITE=0
 MAXTASK=-1
 
 # hard coded inputs
-REPEAT=3
+REPEAT=1
 SCHEDULE="30 60 80 90 100"
 PI=50000
 MODELNAME=resnet18
-BS=52
+BS=64
 WD=0.0001
 MOM=0.9
 OPT="SGD"
-LR=0.1
+LR=0.005
  
 #########################
 #         OURS          #
