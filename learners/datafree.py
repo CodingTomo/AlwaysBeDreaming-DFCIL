@@ -302,11 +302,11 @@ class AlwaysBeDreaming(DeepInversionGenBN):
         if self.gpu:
             mappings = mappings.cuda()
         # Bug??? Non ha senso...
-        #rnt = 1.0 * self.last_valid_out_dim / self.valid_out_dim
-        #mappings[:self.last_valid_out_dim] = rnt
-        #mappings[self.last_valid_out_dim:] = 1-rnt 
-        # dw_cls = mappings[targets.long()]
-        dw_cls = mappings
+        rnt = 1.0 * self.last_valid_out_dim / self.valid_out_dim
+        mappings[:self.last_valid_out_dim] = rnt
+        mappings[self.last_valid_out_dim:] = 1-rnt
+        dw_cls = mappings[targets.long()]
+        #dw_cls = mappings
 
         # forward pass
         logits_pen = self.model.forward(x=inputs, pen=True)
